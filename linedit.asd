@@ -31,7 +31,9 @@
   :author "Nikodemus Siivola <nikodemus@random-state.net>"
   :maintainer "Anmol Khirbat <anmol@khirbat.net>"
   :homepage "https://github.com/sharplispers/linedit"
-  :depends-on (:cffi :terminfo :osicat :alexandria)
+  :depends-on
+  #+win32 (:cffi :terminfo :alexandria)
+  #-win32 (:cffi :terminfo :osicat :alexandria)
   :components
   (
    ;; Common
@@ -41,6 +43,8 @@
    (:file "matcher" :depends-on ("packages"))
 
    ;; Backend
+   #+(and sbcl win32)
+   (:file "sbcl-w32" :depends-on ("packages"))
    (:file "backend" :depends-on ("utility-macros"))
    (:file "terminal-glue")
    (:file "terminal-translations" :depends-on ("packages"))

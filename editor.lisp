@@ -137,10 +137,14 @@
     ;; On CCL, the signal isn't delivered before this function
     ;; returns, which leads to blindness at the next prompt, or worse.
     #+ccl (ccl::interactive-abort)
-    #-ccl (osicat-posix:kill 0 osicat-posix:sigint)))
+    #+(and win32 sbcl) (sb-ext:quit)
+    #-(or ccl (and win32 sbcl)) (osicat-posix:kill 0 osicat-posix:sigint)))
 
 (defun editor-stop (editor)
-  (without-backend editor (osicat-posix:kill 0 osicat-posix:sigtstp)))
+  #-win32
+  (without-backend editor (osicat-posix:kill 0 osicat-posix:sigtstp))
+  #+(and win32 sbcl)
+  (without-backend editor (sb-ext:quit)))
 
 (defun editor-word-start (editor)
   "Returns the index of the first letter of current or previous word,

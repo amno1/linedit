@@ -1,3 +1,14 @@
+Linedit Win32 Patch: 
+
+This is my initial Windows port of the original linedit. It is just a WIP with
+lots of rough edges. Most notably the Enter key does not work properly; use
+Ctrl+J instead if you are testing. Tilde expander, link following and some other
+osicat related functionality is not implemented (yet). Tested in mintty and new
+Windows Terminal only. SBCL only.
+
+The original README content follows below:
+
+
 Linedit is a readline-style library written in Common Lisp that
 provides customizable line-editing for Common Lisp programs.
 

@@ -20,7 +20,7 @@
 ;;;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ;;;; Package
-
+#-win32
 (defpackage :linedit
   (:use :cl :osicat)
   (:import-from :osicat-posix
@@ -36,6 +36,22 @@
                 #:TIOCGWINSZ
                 #:tty-OPOST
                 #:winsize)
+  (:export
+   #:linedit
+   #:formedit
+   #:*default-columns*
+   #:*default-lines*
+   #:*highlight-color*
+   #:install-repl
+   #:uninstall-repl
+   #:start-debug
+   #:end-debug
+   ))
+
+#+(and win32 sbcl)
+(defpackage :linedit
+  (:use :cl :uiop)
+  (:import-from :uiop #:getenv)
   (:export
    #:linedit
    #:formedit
