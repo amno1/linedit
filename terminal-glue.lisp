@@ -21,8 +21,6 @@
 
 (in-package :linedit)
 
-#+(and win32 sbcl)
-
 (defvar +linedit-ok+              0)
 (defvar +linedit-not-atty+        1)
 (defvar +linedit-memory-error+    2)
@@ -76,15 +74,22 @@
       (cffi:foreign-free attr)
       (setf attr nil)
 
-      +linedit-ok+)))
+      +linedit-ok+)
 
-#-win32
-(progn
-  (defun c-terminal-lines (def)
-    (c-terminal-winsize def 'osicat-posix:row "LINES"))
+    (defun c-terminal-winsize (def side side-env)
+      (if (boundp 'TIOCGWINSZ)
+          (cffi:with-foreign-object (size '(:struct winsize))
+            (and (zerop (ioctl 0 TIOCGWINSZ size))
+                 (cffi:foreign-slot-value size '(:struct winsize) side)))
+          (aif (getenv side-env)
+               (parse-integer it)
+               def)))
 
-  (defun c-terminal-columns (def)
-    (c-terminal-winsize def 'osicat-posix:col "COLUMNS")))
+    (defun c-terminal-lines (def)
+      (c-terminal-winsize def 'osicat-posix:row "LINES"))
+
+    (defun c-terminal-columns (def)
+      (c-terminal-winsize def 'osicat-posix:col "COLUMNS"))))
 
 #+(and win32 sbcl)
 (progn
