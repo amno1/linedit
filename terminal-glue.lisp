@@ -99,7 +99,6 @@
   (define-symbol-macro stdin
       (sb-win32:get-std-handle sb-win32:+std-input-handle+))
 
-  (export 'stdout :linedit)
   (export 'stdin :linedit)
   
   (defun terminal-window ()
@@ -128,16 +127,7 @@
              (raw-mode (logand raw-mode (lognot sb-win32:ENABLE_WINDOW_INPUT)))
              (raw-mode (logand raw-mode (lognot sb-win32:ENABLE_PROCESSED_INPUT)))
              (raw-mode (logior raw-mode sb-win32:ENABLE_VIRTUAL_TERMINAL_INPUT))
-             (raw-mode (logior raw-mode #x80))
-             (raw-mode (logior raw-mode #x100))
-             ;; (raw-mode (logior raw-mode sb-win32:ENABLE_QUICK_EDIT_MODE))
-             ;; (raw-mode (logior raw-mode sb-win32:ENABLE_INSERT_MODE))
-             ;; (raw-mode (logand raw-mode (lognot sb-win32:ENABLE_PROCESSED_OUTPUT)))
-             ;; (raw-mode (logand raw-mode (lognot sb-win32:ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
-             ;; (raw-mode (logand raw-mode (lognot sb-win32:ENABLE_WRAP_AT_EOL_OUTPUT)))
-             ;; (raw-mode (logand raw-mode (lognot
-             ;; sb-win32:DISABLE_NEWLINE_AUTO_RETURN)))
-             )
+             (raw-mode (logior raw-mode #x80)))
         (sb-win32:set-console-mode stdin raw-mode))
       +linedit-ok+)
     
